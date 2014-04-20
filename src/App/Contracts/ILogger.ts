@@ -1,5 +1,9 @@
-﻿// if interface will be on the first line, then VS2012 will crash on compile time. Don't know why :)
+﻿// we need to have comments here because if compiled file will not have any output,
+// the Visual studio will crash
 
 interface ILogger {
+    log(msg: JQuery ) : void
+    log(msg: number) : void
     log(msg: string) : void
+    log(msg: Element) : void
 }

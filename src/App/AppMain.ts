@@ -1,13 +1,14 @@
 ﻿import logger = require("logger");
-import form = require("bs.form");
+import view = require("view");
 
 
 class AppMain implements IAppMain {
-    init(): void {
+    public init(): void {
         logger.log("init");
+        view.initLayout();
     }
 
-    showMessage(msg: string): void {
+    public showMessage(msg: string): void {
         logger.log(msg);
         alert(msg);
     }
