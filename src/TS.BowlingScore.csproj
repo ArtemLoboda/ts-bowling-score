@@ -41,10 +41,15 @@
     <TypeScriptCompile Include="App\AppConfig.ts" />
     <TypeScriptCompile Include="App\AppMain.ts" />
     <TypeScriptCompile Include="App\Contracts\IAppMain.ts" />
+    <TypeScriptCompile Include="App\Contracts\IRoll.ts" />
+    <TypeScriptCompile Include="App\Contracts\IScoreStorage.ts" />
     <TypeScriptCompile Include="App\Contracts\IView.ts" />
     <TypeScriptCompile Include="App\Contracts\ILogger.ts" />
+    <TypeScriptCompile Include="App\Contracts\IViewModel.ts" />
+    <TypeScriptCompile Include="App\Models\ScoreStorage.ts" />
     <TypeScriptCompile Include="App\Models\UIView.ts" />
     <TypeScriptCompile Include="App\Models\Logger.ts" />
+    <TypeScriptCompile Include="App\Models\UIViewModel.ts" />
     <TypeScriptCompile Include="Scripts\typings\bootstrap\bootstrap.d.ts" />
     <TypeScriptCompile Include="Scripts\typings\jquery\jquery.d.ts" />
     <TypeScriptCompile Include="Scripts\typings\requirejs\require.d.ts" />

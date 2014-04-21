@@ -8,7 +8,8 @@ require.config({
         appMain: "./AppMain",
         logger: "./Models/Logger",
         view: "./Models/UIView",
-
+        viewModel: "./Models/UIViewModel",
+        scoreStorage: "./Models/ScoreStorage"
     },
     shim: {
         jquery: { exports: "$" },
@@ -18,15 +19,22 @@ require.config({
         view: {exports: "view"}
     }
 });
-// #region require.config duplicated definition for TypeScript to be able to use import x = required("y") syntax
+// #region require.config duplicated definition for Typ eScript to be able to use import x = required("y") syntax
 declare module "logger" {export = log;}
 declare var log: ILogger;
 
 declare module "view" {export = view;}
 declare var view: IView;
+
+declare module "viewModel" { export = viewModel;}
+declare var viewModel: IViewModelCtorable;
+
+declare module "scoreStorage" { export = scoreStorage;}
+declare var scoreStorage: IScoreStorageCtorable;
+
 // #endregion
 
-require( ["appMain", "jquery", "bootstrap"], (main:IAppMain, $:JQuery, bts:JQuery) => {
+require( ["appMain", "jquery", "bootstrap", "viewModel"], (main:IAppMain, $:JQuery, bts:JQuery) => {
     main.init();
 });
 
