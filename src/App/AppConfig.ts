@@ -4,6 +4,7 @@
 require.config({
     paths: {
         jquery: "http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min",
+        "jquery.validate": "../Scripts/jquery.validate",
         bootstrap: "../Scripts/bootstrap.min",
         appMain: "./AppMain",
         logger: "./Models/Logger",
@@ -13,13 +14,21 @@ require.config({
     },
     shim: {
         jquery: { exports: "$" },
-        bootstrap: {exports: "$"},
+        "jquey.validate": {deps: ["jquery"]},
+        bootstrap: {
+            // load bootstrap after jquery is loaded
+            deps: ["jquery"]
+        },
         appMain: {exports: "appMain"},
         logger: {exports: "logger"},
-        view: {exports: "view"}
+        view: {exports: "view"},
+        viewModel: { exports: "viewModel"},
+        scoreStorage: { exports: "scoreStorage" }
     }
 });
 // #region require.config duplicated definition for Typ eScript to be able to use import x = required("y") syntax
+declare module "jquery.validate" { export = $;}
+
 declare module "logger" {export = log;}
 declare var log: ILogger;
 
@@ -34,7 +43,7 @@ declare var scoreStorage: IScoreStorageCtorable;
 
 // #endregion
 
-require( ["appMain", "jquery", "bootstrap", "viewModel"], (main:IAppMain, $:JQuery, bts:JQuery) => {
+require( ["appMain", "jquery", "bootstrap"], (main:IAppMain) => {
     main.init();
 });
 

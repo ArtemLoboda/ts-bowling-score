@@ -40,7 +40,7 @@ class UIViewModel implements IViewModel {
     /**
      * Handler of a button click to grab data and pass them to addRoll method
      */
-    public __addRollHandler(e: JQueryEventObject) : boolean {
+    private __addRollHandler(e: JQueryEventObject) : boolean {
         var firstVal: string = $('#' + this.__settings.firstRollId).val();
         var secondVal: string = $('#' + this.__settings.secondRollId).val();
 
@@ -50,9 +50,6 @@ class UIViewModel implements IViewModel {
         var second: number = parseInt(secondVal);
 
         this.addRoll(first, second);
-
-        var app: IAppMain = require("appMain");
-        app.showMessage("Added!");
 
         // stop event and don't send make a postback
         e.preventDefault();
