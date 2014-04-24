@@ -5,6 +5,7 @@ interface IViewFormSettings {
     secondRollId : string;
     thirdRollId? : string;
     addButtonId : string;
+    form: JQuery;
 }
 
 interface IView {

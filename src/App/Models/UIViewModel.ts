@@ -1,4 +1,5 @@
-﻿import $ = require("jquery");
+﻿/// <amd-dependency path="jquery.validate" />
+import $ = require("jquery");
 import logger = require("logger");
 import storage = require("scoreStorage");
 
@@ -41,6 +42,14 @@ class UIViewModel implements IViewModel {
      * Handler of a button click to grab data and pass them to addRoll method
      */
     private __addRollHandler(e: JQueryEventObject) : boolean {
+        // stop event and don't send make a postback
+        e.preventDefault();
+        var isValid = this.__settings.form.valid();
+        if (!isValid) {
+            var app :IAppMain = require("appMain");
+            app.showMessage("form is not valid");
+        }
+
         var firstVal: string = $('#' + this.__settings.firstRollId).val();
         var secondVal: string = $('#' + this.__settings.secondRollId).val();
 
@@ -51,8 +60,6 @@ class UIViewModel implements IViewModel {
 
         this.addRoll(first, second);
 
-        // stop event and don't send make a postback
-        e.preventDefault();
         return false;
     }
 
