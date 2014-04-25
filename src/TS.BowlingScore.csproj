@@ -49,6 +49,7 @@
     <TypeScriptCompile Include="App\Contracts\IView.ts" />
     <TypeScriptCompile Include="App\Contracts\ILogger.ts" />
     <TypeScriptCompile Include="App\Contracts\IViewModel.ts" />
+    <TypeScriptCompile Include="App\Contracts\IViewValid.ts" />
     <TypeScriptCompile Include="App\Models\ScoreStorage.ts" />
     <TypeScriptCompile Include="App\Models\UIView.ts" />
     <TypeScriptCompile Include="App\Models\Logger.ts" />

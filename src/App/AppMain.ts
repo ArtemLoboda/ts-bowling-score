@@ -9,7 +9,7 @@ class AppMain implements IAppMain {
         view.initLayout();
 
         // init viewModel
-        this.__viewModel = new viewModel(view.getFormSettings());
+        this.__viewModel = new viewModel(view.getFormSettings(), view);
         // attach events handliers to ViewModel
         this.__viewModel.setupEventHandlers();
     }

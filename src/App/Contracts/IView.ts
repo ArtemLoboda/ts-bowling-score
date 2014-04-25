@@ -5,10 +5,10 @@ interface IViewFormSettings {
     secondRollId : string;
     thirdRollId? : string;
     addButtonId : string;
-    form: JQuery;
+    formId: string;
 }
 
-interface IView {
+interface IView extends IViewValid {
     /**
      * Init Layout of the form
      * @param holder - an optional holder for markup structure

@@ -26,7 +26,7 @@ class ScoreStorage implements IScoreStorage {
                 second: parseInt(args[1])
             });
         } else {
-            logger.log(args);
+            //logger.log(args);
             throw "Could not add roll to the storage!";
         }
     }

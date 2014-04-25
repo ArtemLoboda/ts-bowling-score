@@ -2,13 +2,14 @@
 import $ = require("jquery");
 import logger = require("logger");
 
-class UIView implements IView {
+class UIView implements IView, IViewValid {
 
 
     // #region  static fields
     public static firstRollId : string = "firstRoll";
     public static secondRollId : string = "secondRoll";
     public static addId : string = "addRoll";
+    public static formId: string = "score"
     // #endregion
     
     // #region public method
@@ -20,7 +21,7 @@ class UIView implements IView {
         logger.log(holder);
         // build markup
         this.__buildInputForm(holder);
-        this.__setupValidate($("#score-form"));
+        this.__setupValidate($("#" + UIView.formId));
     }
 
     /**
@@ -31,10 +32,19 @@ class UIView implements IView {
             firstRollId: UIView.firstRollId,
             secondRollId: UIView.secondRollId,
             addButtonId: UIView.addId,
-            // TODO: need to move it as a constructor parameter
-            form: $("#score-form")
+            formId: UIView.formId
         };
     }
+
+    public isValid(validationGroup?: string): boolean {
+        return $("#" + UIView.formId).valid();
+    }
+
+    public showErrorMessage(): void {
+        //TODO: need to implement logic which will add custom error message to the holder
+        throw "Not implemented yet";
+    }
+
     // #endregion 
 
     /// #region private methods
@@ -43,16 +53,21 @@ class UIView implements IView {
      * @param root Holder of a markup
      */
     private __buildInputForm(root: JQuery): void {
-        var markup: JQuery = $("<div />", { role: "form" }).addClass("form-horizontal")
+        var markup: JQuery = $("<form />", {
+                id: UIView.formId,
+                method: "GET",
+                action: ".",
+                role: "form"
+            }).addClass("form-horizontal")
             .append(
-            $("<div />").addClass("form-group")
+                $("<div />").addClass("form-group")
                 .append(
-                $("<label />", { for: UIView.firstRollId }).addClass("col-sm-2 control-label").text("First Roll")
+                    $("<label />", { for: UIView.firstRollId }).addClass("col-sm-2 control-label").text("First Roll")
                 )
                 .append(
-                $("<div />").addClass("col-sm-4")
+                    $("<div />").addClass("col-sm-4")
                     .append(
-                    $("<input />", {
+                        $("<input />", {
                             id: UIView.firstRollId,
                             name: this._firstRollName,
                             type: "number",
@@ -61,31 +76,33 @@ class UIView implements IView {
                         }).addClass("form-control")
                     )
                 ),
-            $("<div />").addClass("form-group")
-                .append(
-                $("<label />", { for: UIView.secondRollId }).addClass("col-sm-2 control-label").text("Second Roll")
-                )
-                .append(
-                $("<div />").addClass("col-sm-4")
+                $("<div />").addClass("form-group")
                     .append(
-                    $("<input />", {
-                        id: UIView.secondRollId,
-                        name: this._secondRollName,
-                        type: "number",
-                        min: 0,
-                        max: 10
-                    }).addClass("form-control")
+                        $("<label />", { for: UIView.secondRollId })
+                            .addClass("col-sm-2 control-label")
+                            .text("Second Roll")
                     )
-                ),
-            $("<div />").addClass("form-group")
-                .append(
-                $("<div />").addClass("col-sm-offset-2 col-sm-5")
                     .append(
-                    $("<button />", {
-                        type: "submit",
-                        name: this._addButtonName,
-                        id: UIView.addId
-                    }).addClass("btn btn-success").text("Add Round")
+                        $("<div />").addClass("col-sm-4")
+                        .append(
+                            $("<input />", {
+                                id: UIView.secondRollId,
+                                name: this._secondRollName,
+                                type: "number",
+                                min: 0,
+                                max: 10
+                            }).addClass("form-control")
+                        )
+                    ),
+                $("<div />").addClass("form-group")
+                .append(
+                    $("<div />").addClass("col-sm-offset-2 col-sm-5")
+                    .append(
+                        $("<button />", {
+                            type: "submit",
+                            name: this._addButtonName,
+                            id: UIView.addId
+                        }).addClass("btn btn-success").text("Add Round")
                     )
                 )
             );

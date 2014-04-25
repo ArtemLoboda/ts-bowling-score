@@ -10,10 +10,11 @@ class UIViewModel implements IViewModel {
      * Initialize a new instance of UIViewModel
      * @constructor
      */
-    constructor(formSettings: IViewFormSettings) {
+    constructor(formSettings: IViewFormSettings, validator: IViewValid) {
         this.__settings = formSettings;
         // initialize a new storage holder for this ViewModel
         this.__storage = new storage();
+        this.__validator = validator;
 
     }
     /// #nedregion
@@ -42,12 +43,15 @@ class UIViewModel implements IViewModel {
      * Handler of a button click to grab data and pass them to addRoll method
      */
     private __addRollHandler(e: JQueryEventObject) : boolean {
+        debugger;
         // stop event and don't send make a postback
         e.preventDefault();
-        var isValid = this.__settings.form.valid();
+        
+        var isValid = this.__validator.isValid();
         if (!isValid) {
             var app :IAppMain = require("appMain");
             app.showMessage("form is not valid");
+            return false;
         }
 
         var firstVal: string = $('#' + this.__settings.firstRollId).val();
@@ -69,6 +73,7 @@ class UIViewModel implements IViewModel {
     /// #region psevdo-private fields
     private __settings: IViewFormSettings;
     private __storage: IScoreStorage;
+    private __validator: IViewValid;
     /// #endregion
 }
 

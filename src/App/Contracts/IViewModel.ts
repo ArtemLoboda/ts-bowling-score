@@ -14,5 +14,5 @@ interface IViewModel {
 }
 
 interface IViewModelCtorable extends IViewModel {
-    new(settings: IViewFormSettings) : IViewModel
+    new(settings: IViewFormSettings, validator: IViewValid) : IViewModel
 }
