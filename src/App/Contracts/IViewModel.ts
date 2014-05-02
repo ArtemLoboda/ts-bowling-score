@@ -2,17 +2,17 @@
 interface IViewModel {
 
     /**
-     * Setup event handlers
-     */
-    setupEventHandlers?() : void;
-
-    /**
      * Store roll and compute user score
      */
     addRoll(first: number, second: number, third?: number) : number;
+    addRoll(roll: IRoll) : number;
 
+    /**
+     * Attach handler to ScoreUpdate event
+     */
+    onScoreUpdate(callback: (score: number) => void): void;
 }
 
-interface IViewModelCtorable extends IViewModel {
-    new(settings: IViewFormSettings, validator: IViewValid) : IViewModel
+interface IViewModelCtor extends IViewModel {
+    new() : IViewModel
 }

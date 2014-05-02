@@ -16,7 +16,18 @@ interface IView extends IViewValid {
     initLayout(holder?:JQuery): void;
 
     /**
+     * Attach event handler to rollAdd event
+     */
+    onRollAdd(callback: (roll: IRoll) => void): void;
+
+    scoreUpdateHandler(score: number) : void;
+
+    /**
      * Get Form field ids
      */
     getFormSettings(): IViewFormSettings;
+}
+
+interface IViewCtor {
+    new(): IView
 }

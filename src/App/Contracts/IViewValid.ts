@@ -8,4 +8,4 @@ interface IViewValid {
      * Show custom error
      */
     showErrorMessage():void;
-} 
+}

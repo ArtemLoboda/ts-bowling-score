@@ -1,17 +1,21 @@
 ﻿/// <amd-dependency path="jquery.validate" />
 import $ = require("jquery");
 import logger = require("logger");
+import eventDispatcher = require("eventDispatcher");
 
 class UIView implements IView, IViewValid {
+    // #region private fields
+    private __events: IEventDispatcher; 
 
-
-    // #region  static fields
-    public static firstRollId : string = "firstRoll";
-    public static secondRollId : string = "secondRoll";
-    public static addId : string = "addRoll";
-    public static formId: string = "score"
+    private _firstRollName: string = "first";
+    private _secondRollName: string = "second";
+    private _addButtonName:string = "add";
     // #endregion
-    
+
+    constructor() {
+        this.__events = new eventDispatcher();
+    }
+
     // #region public method
     /**
      * Init Layout of the form
@@ -22,6 +26,16 @@ class UIView implements IView, IViewValid {
         // build markup
         this.__buildInputForm(holder);
         this.__setupValidate($("#" + UIView.formId));
+        this.__setupEvents(holder);
+    }
+
+    public onRollAdd(callback: (roll: IRoll) => void) {
+        this.__events.register("rollAdd", this, callback);
+    }
+
+    public scoreUpdateHandler(score: number): void {
+        var app: IAppMain = require("appMain");
+        app.showMessage("Your score: " + score);
     }
 
     /**
@@ -47,7 +61,7 @@ class UIView implements IView, IViewValid {
 
     // #endregion 
 
-    /// #region private methods
+    // #region private methods
     /**
      * Build markup with a form to input data
      * @param root Holder of a markup
@@ -114,7 +128,7 @@ class UIView implements IView, IViewValid {
      * Attach jquery validation to the fields
      * @param root Holder of the form
      */
-    private __setupValidate(root: JQuery): void {
+    private __setupValidate(form: JQuery): void {
         // define a rules set object
         var rulesSet = {};
         rulesSet[this._firstRollName] = {
@@ -130,17 +144,52 @@ class UIView implements IView, IViewValid {
         }
 
         var validate : ValidationOptions = { rules: rulesSet };
-        root.validate(validate);
+        form.validate(validate);
     }
 
-    /// #endregion
+    /**
+     * Setup DOM event handlers to catch form actions an notify subscribers
+     */
+    private __setupEvents(root: JQuery): void {
+        root.find("#" + UIView.addId).bind("click", (e: JQueryEventObject) => this.__addButtonClickHandler(e));
+    }
 
-    /// #region private fields
-    private _firstRollName: string = "first";
-    private _secondRollName: string = "second";
-    private _addButtonName:string = "add";
-    /// #endregion
+    // #endregion
+
+    // #region private event handlers
+    /**
+     * internal click event handler which check form and notify subscribers about the event.
+     */
+    private __addButtonClickHandler(e: JQueryEventObject): boolean {
+        e.preventDefault();
+        if (!this.isValid()) return;
+        
+        var firstVal: string = $("#" + UIView.firstRollId).val();;
+        var secondVal: string = $("#" + UIView.secondRollId).val();
+
+        logger.log("__addRollHandler: First = \"" + firstVal + "\", Second = \"" + secondVal + "\"");
+
+        var first: number = parseInt(firstVal);
+        var second: number = parseInt(secondVal);
+
+        var roll: IRoll = {
+            first: first,
+            second: second
+        };
+        // notify subscribers about the event
+        this.__events.emit("rollAdd", roll);
+
+        return false;
+    }
+
+    // #endregion
+
+    // #region  static fields
+    public static firstRollId : string = "firstRoll";
+    public static secondRollId : string = "secondRoll";
+    public static addId : string = "addRoll";
+    public static formId: string = "score"
+    // #endregion
 }
 
-var formBuilder : IView = new UIView();
-export = formBuilder; 
+export = UIView;

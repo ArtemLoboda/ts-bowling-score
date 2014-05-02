@@ -4,25 +4,29 @@ import viewModel = require("viewModel");
 
 
 class AppMain implements IAppMain {
-    public init(): void {
-        // init layout form
-        view.initLayout();
+    // #region private fields
+    private __view: IView;
+    private __viewModel: IViewModel;
+    // #endregion
 
-        // init viewModel
-        this.__viewModel = new viewModel(view.getFormSettings(), view);
-        // attach events handliers to ViewModel
-        this.__viewModel.setupEventHandlers();
+    public init(): void {
+        // create
+        this.__view = new view();
+        this.__viewModel = new viewModel();
+        
+        //init
+        this.__view.initLayout();
+
+        // attach event handlers
+        this.__view.onRollAdd((roll: IRoll) => this.__viewModel.addRoll(roll));
+        this.__viewModel.onScoreUpdate((score: number) => this.__view.scoreUpdateHandler(score));
+
     }
 
     public showMessage(msg: string): void {
         logger.log(msg);
         alert(msg);
     }
-
-    /// #region  private fields
-    private __viewModel : IViewModel;
-
-    /// #endregion
 }
 
 var app: IAppMain = new AppMain();

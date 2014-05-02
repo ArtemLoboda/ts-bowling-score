@@ -2,79 +2,67 @@
 import $ = require("jquery");
 import logger = require("logger");
 import storage = require("scoreStorage");
+import eventDispatcher = require("eventDispatcher");
 
 class UIViewModel implements IViewModel {
+
+    /// #region psevdo-private fields
+    private __events: IEventDispatcher;
+    private __storage: IScoreStorage;
+    /// #endregion
 
     /// #region ctor
     /**
      * Initialize a new instance of UIViewModel
      * @constructor
      */
-    constructor(formSettings: IViewFormSettings, validator: IViewValid) {
-        this.__settings = formSettings;
+    constructor() {
         // initialize a new storage holder for this ViewModel
         this.__storage = new storage();
-        this.__validator = validator;
+        // init dispatcher
+        this.__events = new eventDispatcher();
 
     }
     /// #nedregion
 
     /// #region public methods
     /**
-     * Setup event handlers
-     */
-    public setupEventHandlers(): void {
-        // attach click event to handle 
-        $('#' + this.__settings.addButtonId).on('click', (e: JQueryEventObject) => this.__addRollHandler(e));
-    }
-
-    /**
      * Store roll and compute user score
      */
-    public addRoll(first: number, second: number) : number {
-        logger.log("addRoll: First = " + first + ", Second = " + second);
-        this.__storage.add(first, second);
+    public addRoll(roll: IRoll) : number;
+    public addRoll(first: number, second: number, third?: number) : number;
+    public addRoll(...args: any[]) : number {
+        if (typeof args[0] === "number" && typeof args[1] === "number") {
+            var tmpRoll: IRoll = {
+                first: args[0],
+                second: args[1]
+            };
+            return this.addRoll(tmpRoll);
+        }
+        if (typeof args[0] === "object"
+            && typeof (<IRoll>args[0]).first == "number"
+            && typeof (<IRoll>args[0]).second == "number") {
+
+            var roll: IRoll = <IRoll>args[0];
+            logger.log("first: " + roll.first + " second: " + roll.second);
+            this.__storage.add(args[0]);
+        }
+
+        this.__events.emit('scoreUpdate', this.__storage.compute())
         return this.__storage.compute();
     }
+
+    public onScoreUpdate(callback: (score: number) => void): void {
+        this.__events.register('scoreUpdate', this, callback);
+    }
+
     /// #endregion
 
     /// #region private methods
-    /**
-     * Handler of a button click to grab data and pass them to addRoll method
-     */
-    private __addRollHandler(e: JQueryEventObject) : boolean {
-        debugger;
-        // stop event and don't send make a postback
-        e.preventDefault();
-        
-        var isValid = this.__validator.isValid();
-        if (!isValid) {
-            var app :IAppMain = require("appMain");
-            app.showMessage("form is not valid");
-            return false;
-        }
-
-        var firstVal: string = $('#' + this.__settings.firstRollId).val();
-        var secondVal: string = $('#' + this.__settings.secondRollId).val();
-
-        logger.log("__addRollHandler: First = \"" + firstVal + "\", Second = \"" + secondVal + "\"");
-
-        var first: number = parseInt(firstVal);
-        var second: number = parseInt(secondVal);
-
-        this.addRoll(first, second);
-
-        return false;
-    }
 
     /// #endregion
 
 
-    /// #region psevdo-private fields
-    private __settings: IViewFormSettings;
-    private __storage: IScoreStorage;
-    private __validator: IViewValid;
-    /// #endregion
 }
 
 export = UIViewModel;

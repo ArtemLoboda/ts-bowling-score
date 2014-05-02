@@ -43,7 +43,9 @@
   <ItemGroup>
     <TypeScriptCompile Include="App\AppConfig.ts" />
     <TypeScriptCompile Include="App\AppMain.ts" />
+    <TypeScriptCompile Include="App\Common\EventDispatcher.ts" />
     <TypeScriptCompile Include="App\Contracts\IAppMain.ts" />
+    <TypeScriptCompile Include="App\Contracts\IEventDispatcher.ts" />
     <TypeScriptCompile Include="App\Contracts\IRoll.ts" />
     <TypeScriptCompile Include="App\Contracts\IScoreStorage.ts" />
     <TypeScriptCompile Include="App\Contracts\IView.ts" />

@@ -10,37 +10,38 @@ require.config({
         logger: "./Models/Logger",
         view: "./Models/UIView",
         viewModel: "./Models/UIViewModel",
-        scoreStorage: "./Models/ScoreStorage"
+        scoreStorage: "./Models/ScoreStorage",
+        eventDispatcher: "./Common/EventDispatcher"
     },
     shim: {
         jquery: { exports: "$" },
-        "jquey.validate": {deps: ["jquery"]},
+        "jquery.validate": {
+            deps: ["jquery"]
+        },
         bootstrap: {
             // load bootstrap after jquery is loaded
             deps: ["jquery"]
         },
-        appMain: {exports: "appMain"},
-        logger: {exports: "logger"},
-        view: {exports: "view"},
-        viewModel: { exports: "viewModel"},
-        scoreStorage: { exports: "scoreStorage" }
     }
 });
 // #region require.config duplicated definition for Typ eScript to be able to use import x = required("y") syntax
-declare module "jquery.validate" { export = $;}
+declare module "appMain" { export = appMain;}
+declare var appMain: IAppMain;
 
 declare module "logger" {export = log;}
 declare var log: ILogger;
 
 declare module "view" {export = view;}
-declare var view: IView;
+declare var view: IViewCtor;
 
 declare module "viewModel" { export = viewModel;}
-declare var viewModel: IViewModelCtorable;
+declare var viewModel: IViewModelCtor;
 
 declare module "scoreStorage" { export = scoreStorage;}
-declare var scoreStorage: IScoreStorageCtorable;
+declare var scoreStorage: IScoreStorageCtor;
 
+declare module "eventDispatcher" {export = eventDispatcher;}
+declare var eventDispatcher: IEventDispatcherCtor;
 // #endregion
 
 require( ["appMain", "jquery", "bootstrap"], (main:IAppMain) => {

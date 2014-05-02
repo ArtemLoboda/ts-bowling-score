@@ -23,6 +23,6 @@
     compute(): number;
  }
 
-interface IScoreStorageCtorable extends IScoreStorage {
+interface IScoreStorageCtor extends IScoreStorage {
     new() : IScoreStorage;
 }
