@@ -4,10 +4,9 @@ import logger = require("logger");
 import storage = require("scoreStorage");
 import eventDispatcher = require("eventDispatcher");
 
-class UIViewModel implements IViewModel {
+class UIViewModel extends eventDispatcher implements IViewModel {
 
     /// #region psevdo-private fields
-    private __events: IEventDispatcher;
     private __storage: IScoreStorage;
     /// #endregion
 
@@ -17,10 +16,9 @@ class UIViewModel implements IViewModel {
      * @constructor
      */
     constructor() {
+        super(["scoreUpdate"]);
         // initialize a new storage holder for this ViewModel
         this.__storage = new storage();
-        // init dispatcher
-        this.__events = new eventDispatcher();
 
     }
     /// #nedregion
@@ -48,12 +46,8 @@ class UIViewModel implements IViewModel {
             this.__storage.add(args[0]);
         }
 
-        this.__events.emit('scoreUpdate', this.__storage.compute())
+        this.emit('scoreUpdate', this.__storage.compute())
         return this.__storage.compute();
-    }
-
-    public onScoreUpdate(callback: (score: number) => void): void {
-        this.__events.register('scoreUpdate', this, callback);
     }
 
     /// #endregion

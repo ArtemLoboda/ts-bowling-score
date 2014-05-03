@@ -3,7 +3,7 @@ import $ = require("jquery");
 import logger = require("logger");
 import eventDispatcher = require("eventDispatcher");
 
-class UIView implements IView, IViewValid {
+class UIView extends eventDispatcher implements IView, IViewValid {
     // #region private fields
     private __events: IEventDispatcher; 
 
@@ -13,7 +13,7 @@ class UIView implements IView, IViewValid {
     // #endregion
 
     constructor() {
-        this.__events = new eventDispatcher();
+        super(["rollAdd"]);
     }
 
     // #region public method
@@ -27,10 +27,6 @@ class UIView implements IView, IViewValid {
         this.__buildInputForm(holder);
         this.__setupValidate($("#" + UIView.formId));
         this.__setupEvents(holder);
-    }
-
-    public onRollAdd(callback: (roll: IRoll) => void) {
-        this.__events.register("rollAdd", this, callback);
     }
 
     public scoreUpdateHandler(score: number): void {
@@ -177,7 +173,7 @@ class UIView implements IView, IViewValid {
             second: second
         };
         // notify subscribers about the event
-        this.__events.emit("rollAdd", roll);
+        this.emit("rollAdd", roll);
 
         return false;
     }

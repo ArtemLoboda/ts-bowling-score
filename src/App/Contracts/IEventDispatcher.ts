@@ -8,10 +8,10 @@
     /**
      * Register an event handler
      * @param eventName A string containing event type. 
-     * @param context The context of a callback call
      * @param callback A callback function which will be called in emit
+     * @param context The context of a callback call
      */
-    register(eventName: string, context: any, callback: IListenerCallback):void;
+    register(eventName: string, callback: IListenerCallback, context: any):void;
 
     /**
      * Emit subscribers by the defined event
@@ -28,6 +28,14 @@
 
 interface IEventDispatcherCtor extends IEventDispatcher {
     new(): IEventDispatcher;
+    new(allowedEvents?: any[]) : IEventDispatcher
+}
+
+interface IEventAllowedRegex {
+    regex: RegExp;
+}
+interface IEventAllowedStrRegex {
+    regex: string;
 }
 
 interface IListenerCallback {

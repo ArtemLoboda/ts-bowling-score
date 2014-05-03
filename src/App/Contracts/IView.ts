@@ -8,17 +8,12 @@ interface IViewFormSettings {
     formId: string;
 }
 
-interface IView extends IViewValid {
+interface IView extends IViewValid, IEventDispatcher {
     /**
      * Init Layout of the form
      * @param holder - an optional holder for markup structure
      */
     initLayout(holder?:JQuery): void;
-
-    /**
-     * Attach event handler to rollAdd event
-     */
-    onRollAdd(callback: (roll: IRoll) => void): void;
 
     scoreUpdateHandler(score: number) : void;
 
