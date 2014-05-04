@@ -1,5 +1,5 @@
 ﻿/// <reference path="./Contracts/IAppMain.ts"/>
-/// <reference path="./Common/EventDispatcher.ts"/>
+/// <reference path="./Common/EventDispatcher.d.ts"/>
 /// <reference path="../Scripts/typings/jquery/jquery.d.ts"/>
 
 require.config({
@@ -47,15 +47,8 @@ declare var viewModel: IViewModelCtor;
 declare module "scoreStorage" { export = scoreStorage;}
 declare var scoreStorage: IScoreStorageCtor;
 
+/// defined in ./Common/EventDispatcher.d.ts
 declare module "eventDispatcher" {export = EventDispatcher}
-declare class EventDispatcher implements IEventDispatcher {
-    constructor();
-    constructor(allowedEvents?: any[]);
-    register(eventName: string, callback: IListenerCallback):void;
-    register(eventName: string, callback: IListenerCallback, context: any):void;
-    emit(eventName: string):void;
-    emit(eventName: string, ...params:any[]):void;
-}
 
 // #endregion
 

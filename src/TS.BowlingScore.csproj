@@ -43,6 +43,7 @@
   <ItemGroup>
     <TypeScriptCompile Include="App\AppConfig.ts" />
     <TypeScriptCompile Include="App\AppMain.ts" />
+    <TypeScriptCompile Include="App\Common\EventDispatcher.d.ts" />
     <TypeScriptCompile Include="App\Common\EventDispatcher.ts" />
     <TypeScriptCompile Include="App\Contracts\IAppMain.ts" />
     <TypeScriptCompile Include="App\Contracts\IEventDispatcher.ts" />
@@ -106,6 +107,7 @@
     <TypeScriptRemoveComments>False</TypeScriptRemoveComments>
     <TypeScriptSourceMap>True</TypeScriptSourceMap>
     <TypeScriptModuleKind>AMD</TypeScriptModuleKind>
+    <TypeScriptGeneratesDeclarations>False</TypeScriptGeneratesDeclarations>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)' == 'Release'">
     <TypeScriptTarget>ES5</TypeScriptTarget>
