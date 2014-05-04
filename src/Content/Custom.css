@@ -1,0 +1,8 @@
+﻿.table>thead>tr>th.v-centered, 
+.table>tbody>tr>th.v-centered, 
+.table>tfoot>tr>th.v-centered, 
+.table>thead>tr>td.v-centered, 
+.table>tbody>tr>td.v-centered, 
+.table>tfoot>tr>td.v-centered {
+    vertical-align: middle;
+}

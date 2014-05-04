@@ -24,14 +24,19 @@ class UIView extends eventDispatcher implements IView, IViewValid {
     public initLayout(holder: JQuery = $("#content")): void {
         logger.log(holder);
         // build markup
-        this.__buildInputForm(holder);
-        this.__setupValidate($("#" + UIView.formId));
-        this.__setupEvents(holder);
+        this._buildInputForm(holder);
+        this._setupValidate($("#" + UIView.formId));
+        this._setupEvents(holder);
+        this._buildScoreContainer(holder);
     }
 
-    public scoreUpdateHandler(score: number): void {
-        var app: IAppMain = require("appMain");
-        app.showMessage("Your score: " + score);
+    /**
+     * Update score-table
+     * @param score Total score of a member
+     * @param rolls All rounds of a member
+     */
+    public scoreUpdateHandler(score: number, rolls: IRoll[]): void {
+        this._buildScoreTable(rolls, score);
     }
 
     /**
@@ -62,7 +67,7 @@ class UIView extends eventDispatcher implements IView, IViewValid {
      * Build markup with a form to input data
      * @param root Holder of a markup
      */
-    private __buildInputForm(root: JQuery): void {
+    private _buildInputForm(root: JQuery): void {
         var markup: JQuery = $("<form />", {
                 id: UIView.formId,
                 method: "GET",
@@ -124,7 +129,7 @@ class UIView extends eventDispatcher implements IView, IViewValid {
      * Attach jquery validation to the fields
      * @param root Holder of the form
      */
-    private __setupValidate(form: JQuery): void {
+    private _setupValidate(form: JQuery): void {
         // define a rules set object
         var rulesSet = {};
         rulesSet[this._firstRollName] = {
@@ -143,11 +148,57 @@ class UIView extends eventDispatcher implements IView, IViewValid {
         form.validate(validate);
     }
 
+
+    private _buildScoreContainer(root: JQuery): void {
+        var container: JQuery = $("<div />", { id: UIView.scoreContainerId })
+            .append(
+                $("<h1 />").append("Table Score")
+            );
+        root.append(container);
+        this._buildScoreTable();
+    }
+
+    /**
+     * Build total score table with statistics of rolls
+     */
+    private _buildScoreTable(rolls?: IRoll[], total?: number): void {
+        if (typeof rolls === "undefined") rolls = <IRoll[]>[];
+        var table = $("#" + UIView.scoreTableId).length <= 0
+            ? $("<table />", { id: UIView.scoreTableId, "class" : "table" })
+            : $("#" + UIView.scoreTableId).detach().empty();
+
+        table.append(
+            $("<tr/>").append(
+                $("<td />").text("Round")
+            ),
+            $("<tr />").append(
+                $("<td />").text("First")
+            ),
+            $("<tr />").append(
+                $("<td />").text("Second")
+            )
+        );
+
+        var maxRounds = 10;
+        var rows = table.find("tr");
+        for (var index = 0; index < maxRounds; index++) {
+            $(rows[0]).append($("<td />").text(index + 1));
+            var roll = rolls[index]||<IRoll>{};
+            $(rows[1]).append($("<td />").text(typeof roll.first === "undefined" ? <any>"" : <any>roll.first));
+            $(rows[2]).append($("<td />").text(typeof roll.second === "undefined" ? <any>"" : <any>roll.second));
+        }
+
+        $(rows[0]).append($("<td />").text("Total"));
+        $(rows[1]).append($("<td />", { rowspan: 2, "class": "v-centered" }).text(total|0));
+
+        $("#" + UIView.scoreContainerId).append(table);
+    }
+
     /**
      * Setup DOM event handlers to catch form actions an notify subscribers
      */
-    private __setupEvents(root: JQuery): void {
-        root.find("#" + UIView.addId).bind("click", (e: JQueryEventObject) => this.__addButtonClickHandler(e));
+    private _setupEvents(root: JQuery): void {
+        root.find("#" + UIView.addId).bind("click", (e: JQueryEventObject) => this._addButtonClickHandler(e));
     }
 
     // #endregion
@@ -156,7 +207,7 @@ class UIView extends eventDispatcher implements IView, IViewValid {
     /**
      * internal click event handler which check form and notify subscribers about the event.
      */
-    private __addButtonClickHandler(e: JQueryEventObject): boolean {
+    private _addButtonClickHandler(e: JQueryEventObject): boolean {
         e.preventDefault();
         if (!this.isValid()) return;
         
@@ -185,6 +236,8 @@ class UIView extends eventDispatcher implements IView, IViewValid {
     public static secondRollId : string = "secondRoll";
     public static addId : string = "addRoll";
     public static formId: string = "score"
+    public static scoreContainerId: string = "scoreContainer";
+    public static scoreTableId: string = "scoreTable";
     // #endregion
 }
 

@@ -46,7 +46,7 @@ class UIViewModel extends eventDispatcher implements IViewModel {
             this.__storage.add(args[0]);
         }
 
-        this.emit('scoreUpdate', this.__storage.compute())
+        this.emit('scoreUpdate', this.__storage.compute(), this.__storage.getAll())
         return this.__storage.compute();
     }
 

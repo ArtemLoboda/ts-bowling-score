@@ -18,8 +18,8 @@ class AppMain implements IAppMain {
         this.__view.initLayout();
 
         // attach event handlers
-        this.__view.register('rollAdd', (roll: IRoll) => this.__viewModel.addRoll(roll));
-        this.__viewModel.register('scoreUpdate', (score: number) => this.__view.scoreUpdateHandler(score));
+        this.__view.on('rollAdd', this.__viewModel.addRoll, this.__viewModel);
+        this.__viewModel.on('scoreUpdate', this.__view.scoreUpdateHandler, this.__view);
 
     }
 

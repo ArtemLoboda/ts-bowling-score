@@ -15,7 +15,12 @@ interface IView extends IViewValid, IEventDispatcher {
      */
     initLayout(holder?:JQuery): void;
 
-    scoreUpdateHandler(score: number) : void;
+    /**
+     * Update score-table
+     * @param score Total score of a member
+     * @param rolls All rounds of a member
+     */
+    scoreUpdateHandler(score: number, rolls: IRoll[]) : void;
 
     /**
      * Get Form field ids

@@ -18,26 +18,15 @@
      * Register an event handler
      * @param eventName A string containing event type. 
      * @param callback A callback function which will be called in emit
-     */
-    public register(eventName: string, callback: IListenerCallback): void;
-    /**
-     * Register an event handler
-     * @param eventName A string containing event type. 
-     * @param callback A callback function which will be called in emit
      * @param context The context of a callback call
      */
-    public register(eventName: string, callback: IListenerCallback, context: any): void;
-    public register(eventName: string, ...args:any[]): void {
+    public register(eventName: string, callback: IListenerCallback, context?: any): void {
         if (!this._isEventAllowed(eventName)) {
             throw "\"" + eventName + "\" is not allowed";
         }
 
-        var context: any = null;
-        var callback: IListenerCallback = null;
-
-        callback = <IListenerCallback>args[0];
         // define callback scope. In case of null will be used callback scope
-        context = <any>(args[1]||callback);
+        context = <any>(context||callback);
 
         var evtName: string = this.__prefix + eventName;
         if (typeof this.__listeners[evtName] === "undefined") {
@@ -76,6 +65,11 @@
             descriptor.callback.apply(descriptor.context, params);
         }
     }
+
+    public on(eventName: string, callback: IListenerCallback, context?: any): void {
+        this.register(eventName, callback, context);
+    }
+
     // #endregion
 
     // #region private methods
